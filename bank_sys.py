@@ -7,7 +7,7 @@ from _enum import log, mis
 
 class Bank:
 
-    def __init__(self, file_name, defolt_money = None) -> None:
+    def __init__(self, file_name: str, defolt_money: float = None) -> None:
 
         if defolt_money:
             self.defolt_money = defolt_money
@@ -15,7 +15,7 @@ class Bank:
             self.defolt_money = 0
         
         self.file_name = file_name
-        self.data = {}
+        self.data: dict
 
         
 
@@ -32,27 +32,29 @@ class Bank:
             json.dump(self.data, f, separators=(",", ":"))
 
 
-    def new_user(self, user_name, money = None): 
+    def new_user(self, user_name: str, money:float = None): 
         self.data[user_name] = money
+        print(f"person with name {user_name} has been create")
 
         return self.data
     
 
-    def transers(self, from_who_name, to_whom_name, money):
+    def transers(self, from_who_name:str, to_whom_name: str, money: float):
 
         Bank._read_json(Bank)
         self.data[from_who_name] -= money
         self.data[to_whom_name] += money
+        print(f"{from_who_name} transfer {money} to {to_whom_name}")
         Bank._write_json(Bank)
 
 
-    def add_money(self, user_name, money):
+    def add_money(self, user_name: str, money: float):
         Bank._read_json(Bank)
         self.data[user_name] += money
         Bank._write_json(Bank)
 
 
-    def get_money(self, user_name, money):
+    def get_money(self, user_name: str, money:float):
 
         Bank._read_json(Bank)
         if (self.data[user_name] - money) < 0:
@@ -62,7 +64,7 @@ class Bank:
         Bank._write_json(Bank)
 
 
-    def ban(self, user_name):
+    def ban(self, user_name:str):
         Bank._read_json(Bank)
         self.data[f"{user_name}_ban"] = self.data[user_name]
         del self.data[user_name]
@@ -71,7 +73,7 @@ class Bank:
         
     
     
-    def unban(self, user_name):
+    def unban(self, user_name:str):
         Bank._read_json(Bank)
         self.data[user_name] = self.data[f"{user_name}_ban"]
         del self.data[f"{user_name}_ban"]
@@ -80,11 +82,11 @@ class Bank:
     
 
     
-    def set(self, money):
+    def set(self, money:str):
         self.defolt_money = money
 
     
-    def _check_user_name(self, user_name):
+    def _check_user_name(self, user_name:str):
         Bank._read_json(Bank)
         if user_name not in self.data:
             return 1
