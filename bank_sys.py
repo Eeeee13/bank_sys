@@ -15,16 +15,19 @@ class Bank:
             self.defolt_money = 0
         
         self.file_name = file_name
-        self.data: dict
+        self.data = {}
 
         
 
     def _read_json(self):
 
         with open(f"{self.file_name}.json", 'a', encoding="utf-8") as f:
-            self.data = json.load(f)
+            try:
+                self.data = json.load(f)
+            except:
+                pass
         
-        return self.data
+        
 
 
     def _write_json(self):
@@ -35,9 +38,8 @@ class Bank:
     def new_user(self, user_name: str, money:float = None): 
         self.data[user_name] = money
         print(f"person with name {user_name} has been create")
+        Bank._write_json(Bank)
 
-        return self.data
-    
 
     def transers(self, from_who_name:str, to_whom_name: str, money: float):
 
@@ -58,8 +60,9 @@ class Bank:
 
         Bank._read_json(Bank)
         if (self.data[user_name] - money) < 0:
-            return "dont have enough money"
-
+            print("dont have enough money")
+            return
+        
         self.data[user_name] -= money
         Bank._write_json(Bank)
 
@@ -69,7 +72,7 @@ class Bank:
         self.data[f"{user_name}_ban"] = self.data[user_name]
         del self.data[user_name]
         Bank._write_json(Bank)
-        return "user has been ban"
+        print("user has been ban")
         
     
     
@@ -78,7 +81,7 @@ class Bank:
         self.data[user_name] = self.data[f"{user_name}_ban"]
         del self.data[f"{user_name}_ban"]
         Bank._read_json(Bank)
-        return "user has been unbun"
+        print("user has been unbun")
     
 
     
@@ -95,6 +98,7 @@ class Bank:
 file_name = input("input file name you would like: ").strip()
 defolt_money = int(input("input defolt amount of money. if you skip it, defolt will be 0 ").strip())
 new_bank = Bank(file_name, defolt_money)
+new_bank._read_json()
 
 def doit():
 
@@ -155,6 +159,14 @@ def start():
 
     
 
+       
+
+
+
+
+
+        
+        
        
 
 
